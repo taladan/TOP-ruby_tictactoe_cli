@@ -33,8 +33,8 @@ TTT has the following components:
 3. Draw the game board.
 4. Start the game loop.
 	1. Player 1 picks a cell to place an 'X' in.
-	2. Redraw the game board with the most recent move
-	3. Check for win state, if win state, display winner and query to play again, if no win state, proceed
+	2. Check for win state, if win state, display winner and query to play again, if no win state, proceed
+	3. Redraw the game board with the most recent move
 	4. Player 2 picks a cell to place an 'O' in.
 	5. Check for win state, if win state, display winner and query to play again, if no win state, proceed
 	6.  Redraw the game board with the most recent move
@@ -73,3 +73,9 @@ With the preceeding description of a game of tic-tac-toe, we can see that there 
 - A way to determine if win state has been reached
 - A way to query the player(s) if they want to play again.
 - A way to exit gracefully if no play is requested.
+
+
+#### Flowchart
+This is not perfect, but I'm imagining something like this:
+
+![[Drawing TOP-ruby_tictactoe 2023-03-11 20.19.55.excalidraw.svg]]
