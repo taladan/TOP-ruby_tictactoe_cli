@@ -78,4 +78,4 @@ With the preceeding description of a game of tic-tac-toe, we can see that there 
 #### Flowchart
 This is not perfect, but I'm imagining something like this:
 
-![[ruby_tictactoe.excalidraw.svg]]:w
+![[img/ruby_tictactoe.excalidraw.svg]]
