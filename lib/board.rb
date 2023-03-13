@@ -105,9 +105,4 @@ class Board
     #{@space_line}
     BOARD
   end
-
-  def all_equal?(arr)
-    # To fix
-    arr.uniq.size == 1
-  end
 end
