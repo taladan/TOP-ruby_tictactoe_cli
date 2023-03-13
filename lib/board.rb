@@ -9,7 +9,9 @@ class Board
     @scores = { p1: 0, p2: 0, ties: 0 }
     @separator_line = "________________|_______________|_________________"
     @space_line = "                |               |                "
+    # Currently using for testing win-state settings
     @board_matrix = Matrix[%w[X O O], %w[X O X], %w[X X O]]
+    # Uncomment before finish
     #@board_matrix = Matrix[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
     @row0 =
       "\t#{@board_matrix[0, 0]}\t|\t#{@board_matrix[0, 1]}\t|\t#{@board_matrix[0, 2]}"
