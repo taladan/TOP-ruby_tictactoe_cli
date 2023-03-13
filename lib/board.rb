@@ -7,18 +7,19 @@ class Board
     @player2 = player2
     @winner = ""
     @scores = { p1: 0, p2: 0, ties: 0 }
-    @separator_line = "________________|_______________|_________________"
+    @separator_line = "   _____________|_______________|______________   "
     @space_line = "                |               |                "
     # Currently using for testing win-state settings
-    @board_matrix = Matrix[%w[X O O], %w[X O X], %w[X X O]]
+    # @board_matrix = Matrix[%w[X O O], %w[X O X], %w[X X O]]
     # Uncomment before finish
-    #@board_matrix = Matrix[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+    @board_matrix = Matrix[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+    @row_top = " \t0\t \t1\t \t2"
     @row0 =
-      "\t#{@board_matrix[0, 0]}\t|\t#{@board_matrix[0, 1]}\t|\t#{@board_matrix[0, 2]}"
+      "A\t#{@board_matrix[0, 0]}\t|\t#{@board_matrix[0, 1]}\t|\t#{@board_matrix[0, 2]}"
     @row1 =
-      "\t#{@board_matrix[1, 0]}\t|\t#{@board_matrix[1, 1]}\t|\t#{@board_matrix[1, 2]}"
+      "B\t#{@board_matrix[1, 0]}\t|\t#{@board_matrix[1, 1]}\t|\t#{@board_matrix[1, 2]}"
     @row2 =
-      "\t#{@board_matrix[2, 0]}\t|\t#{@board_matrix[2, 1]}\t|\t#{@board_matrix[2, 2]}"
+      "C\t#{@board_matrix[2, 0]}\t|\t#{@board_matrix[2, 1]}\t|\t#{@board_matrix[2, 2]}"
     @game_over = false
   end
 
@@ -27,12 +28,58 @@ class Board
     print game_grid()
   end
 
-  def game_over?
+  def game_over
     check_win_state()
     @game_over
   end
 
+  def play_piece(player, choice)
+    cell = get_cell(choice)
+    p cell
+    if player == "Player 1"
+      piece = "X"
+    else
+      piece = "O"
+    end
+
+    if self.playable?(cell)
+      puts "playing #{piece} in #{choice}"
+      @board_matrix[cell[0], cell[1]] = piece
+    else
+      puts "That cell has already been chosen"
+    end
+  end
+
   private
+
+  # convert player choice to a matrix call (2 element array)
+  def get_cell(choice)
+    case choice
+    when "a0"
+      [0, 0]
+    when "a1"
+      [0, 1]
+    when "a2"
+      [0, 2]
+    when "b0"
+      [1, 0]
+    when "b1"
+      [1, 1]
+    when "b2"
+      [1, 2]
+    when "c0"
+      [2, 0]
+    when "c1"
+      [2, 1]
+    when "c2"
+      [2, 2]
+    end
+  end
+
+  # Cell isn't playable if an X or O is already in it
+  def playable?(cell)
+    @board_matrix[cell[0], cell[1]] == " "
+  end
 
   def check_win_state()
     if blank?()
@@ -92,9 +139,21 @@ class Board
     @board_matrix.all? { |elem| elem == " " }
   end
 
+  # We have to update the game grid each time a play is made
+  def update_grid
+    @row0 =
+      "A\t#{@board_matrix[0, 0]}\t|\t#{@board_matrix[0, 1]}\t|\t#{@board_matrix[0, 2]}"
+    @row1 =
+      "B\t#{@board_matrix[1, 0]}\t|\t#{@board_matrix[1, 1]}\t|\t#{@board_matrix[1, 2]}"
+    @row2 =
+      "C\t#{@board_matrix[2, 0]}\t|\t#{@board_matrix[2, 1]}\t|\t#{@board_matrix[2, 2]}"
+  end
+
   def game_grid
+    update_grid
     # do not change any spacing within this declaration
     <<~BOARD
+    #{@row_top}
     #{@space_line}\tScores:
     #{@row0}
     #{@separator_line}\t\tPlayer 1: #{@scores[:p1]}
