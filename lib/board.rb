@@ -23,7 +23,6 @@ class Board
   end
 
   def draw_board()
-    # figure out how to draw the board
     system("clear") || system("cls")
     print game_grid()
   end
