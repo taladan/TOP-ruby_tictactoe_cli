@@ -28,7 +28,6 @@ class Board
 
   def game_over?
     check_win_state()
-    draw_board()
     @game_over
   end
 
