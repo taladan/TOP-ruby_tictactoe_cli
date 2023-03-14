@@ -1,7 +1,7 @@
 # lib/player.rb
 
 class Player
-  attr_reader :name
+  attr_reader :name, :piece
   attr_accessor :score
   def initialize(name, piece)
     @name = name
