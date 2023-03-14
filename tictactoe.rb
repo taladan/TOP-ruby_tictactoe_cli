@@ -5,7 +5,6 @@ require "./lib/messaging"
 include Messaging
 
 system("clear") || system("cls")
-turn = "Player 1"
 
 def start_game()
   answer = play?()
@@ -41,7 +40,7 @@ def start_game()
     write("Reticulating Splines")
     write("....", rand(0..1))
     # Game loop should go here
-    game_loop(new_game)
+    game_loop(new_game, player1, player2)
   else
     write(
       "You don't want to play?  Perhaps you would rather a game of Thermo-Nuclear Warfare instead?",
@@ -66,9 +65,18 @@ def play?()
   answer == "y"
 end
 
-def game_loop(game)
-  game.draw_board()
-  game.game_over = true until game.game_over
+def game_loop(game, player1, player2)
+  turn = player1
+  until game.game_over
+    game.game_over()
+    game.draw_board()
+    game.play_piece(turn)
+    if turn == player1
+      turn = player2
+    else
+      turn = player1
+    end
+  end
 end
 
 start_game()
