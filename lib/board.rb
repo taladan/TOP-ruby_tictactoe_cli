@@ -1,6 +1,8 @@
 require "matrix"
 require "./lib/cells"
+require "./lib/messaging"
 include Cells
+include Messaging
 
 class Board
   attr_accessor :game_over
@@ -13,9 +15,9 @@ class Board
     @separator_line = "   _____________|_______________|______________   "
     @space_line = "                |               |                "
     # Currently using for testing win-state settings
-    @board_matrix = Matrix[%w[X O O], %w[X O X], %w[X X O]]
+    # @board_matrix = Matrix[%w[X O O], %w[X O X], %w[X X O]]
     # Uncomment before finish
-    # @board_matrix = Matrix[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+    @board_matrix = Matrix[[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
     @row_top = " \t0\t \t1\t \t2"
     @row0 =
       "A\t#{@board_matrix[0, 0]}\t|\t#{@board_matrix[0, 1]}\t|\t#{@board_matrix[0, 2]}"
@@ -36,20 +38,24 @@ class Board
     @game_over
   end
 
-  def play_piece(player, choice)
-    cell = get_cell(choice)
-    if player == "Player 1"
-      piece = "X"
-    else
-      piece = "O"
+  def play_piece(player)
+    choice = ""
+
+    # Is the choice valid (in the range a0..c2)
+    until input_valid?(choice)
+      write("Please choose a spot to place your piece:> ")
+      choice = gets.chomp
     end
 
-    if self.playable?(@board_matrix, cell)
-      puts "playing #{piece} in #{choice}"
-      @board_matrix[cell[0], cell[1]] = piece
-    else
-      puts "That cell has already been chosen"
+    cell = get_cell(choice)
+    piece = player.piece
+
+    # is the choice playable?
+    until playable?(@board_matrix, cell)
+      write("That spot is already taken.  Please choose again")
+      # Call to reset player choice
     end
+    @board_matrix[cell[0], cell[1]] = piece
   end
 
   private
@@ -142,8 +148,8 @@ class Board
     #{@row_top}
     #{@space_line}\tScores:
     #{@row0}
-    #{@separator_line}\t\t#{@player1}: #{@player1.score}
-    #{@space_line}\t\t#{@player2}: #{@player2.score}
+    #{@separator_line}\t\t#{@player1.name}: #{@player1.score}
+    #{@space_line}\t\t#{@player2.name}: #{@player2.score}
     #{@row1}\t\t\tTies:     #{@scores[:ties]}
     #{@separator_line}
     #{@space_line}
