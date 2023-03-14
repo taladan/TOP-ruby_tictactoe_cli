@@ -6,6 +6,7 @@ include Messaging
 
 class Board
   attr_accessor :game_over
+  attr_reader :board_matrix
   def initialize(p1, p2)
     @player1 = p1
     @player2 = p2
@@ -36,6 +37,10 @@ class Board
   def game_over
     check_win_state()
     @game_over
+  end
+
+  def computer_play(player)
+    # TODO
   end
 
   def play_piece(player)
