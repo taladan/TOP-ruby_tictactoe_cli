@@ -3,7 +3,7 @@ require "./lib/player"
 require "matrix"
 
 class Computer < Player
-  attr_reader :name, :piece
+  attr_reader :name, :piece, :type
 
   def initialize(name, piece)
     super(name, piece)
