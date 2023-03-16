@@ -1,4 +1,3 @@
-require "matrix"
 require "./lib/cells"
 require "./lib/messaging"
 include Cells
