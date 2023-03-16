@@ -1,4 +1,5 @@
 # tictactoe.rb
+require "matrix"
 require "./lib/board"
 require "./lib/player"
 require "./lib/messaging"
