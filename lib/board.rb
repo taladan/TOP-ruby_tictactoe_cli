@@ -5,14 +5,13 @@ include Cells
 include Messaging
 
 class Board
-  attr_accessor :game_over
-  attr_reader :board_matrix
+  attr_accessor :game_over, :ties
+  attr_reader :board_matrix, :winner
   def initialize(p1, p2)
     @player1 = p1
     @player2 = p2
     @winner = ""
     # This will be deprecated after full implementation of player objects
-    @scores = { p1: 0, p2: 0, ties: 0 }
     @separator_line = "   _____________|_______________|______________   "
     @space_line = "                |               |                "
     # Currently using for testing win-state settings
@@ -44,26 +43,29 @@ class Board
   end
 
   def play_piece(player)
-    choice = ""
-
-    # Is the choice valid (in the range a0..c2)
-    until input_valid?(choice)
-      write("Please choose a spot to place your piece:> ")
-      choice = gets.chomp
-    end
-
-    cell = get_cell(choice)
-    piece = player.piece
-
+    # Need to refactor this so that it works when an already filled cell is chosen.
     # is the choice playable?
+    #
+    # if spot is playable? Play spot.  Otherwise prompt for a new spot and try to play again.
+    cell = get_cell(get_player_choice())
+    piece = player.piece
     until playable?(@board_matrix, cell)
-      write("That spot is already taken.  Please choose again")
-      # Call to reset player choice
+      write("That spot is already taken./n")
+      cell = get_cell(get_player_choice())
     end
     @board_matrix[cell[0], cell[1]] = piece
   end
 
   private
+
+  def get_player_choice()
+    choice = ""
+    until input_valid?(choice)
+      write("Please choose a spot to place your piece:> ")
+      choice = gets.chomp
+    end
+    choice
+  end
 
   def check_win_state()
     if blank?()
@@ -72,7 +74,6 @@ class Board
     elsif full?()
       @game_over = true
       @winner = "Tie"
-      @scores[:ties] += 1
     end
     check_cols()
     check_rows()
@@ -82,13 +83,11 @@ class Board
   def check_diagonals()
     if (0..2).map { |cell| @board_matrix[cell, cell] }.all?("X") ||
          2.downto(0).map { |cell| @board_matrix[cell, cell] }.all?("X")
-      @winner = "Player 1"
-      @player1.score += 1
+      @winner = @player1
       @game_over = true
     elsif (0..2).map { |cell| @board_matrix[cell, cell] }.all?("O") ||
           2.downto(0).map { |cell| @board_matrix[cell, cell] }.all?("O")
-      @winner = "Player 2"
-      @player2.score += 1
+      @winner = @player2
       @game_over = true
     end
   end
@@ -97,12 +96,10 @@ class Board
     rows = (0..2).to_a
     rows.each do |row|
       if @board_matrix.row(row).all?("X")
-        @winner = "Player 1"
-        @player1.score += 1
+        @winner = @player1
         @game_over = true
       elsif @board_matrix.row(row).all?("O")
-        @winner = "Player 2"
-        @player2.score += 1
+        @winner = @player2
         @game_over = true
       end
     end
@@ -112,12 +109,10 @@ class Board
     columns = (0..2).to_a
     columns.each do |col|
       if @board_matrix.column(col).all?("X")
-        @winner = "Player 1"
-        @player1.score += 1
+        @winner = @player1
         @game_over = true
       elsif @board_matrix.column(col).all?("O")
-        @winner = "Player 2"
-        @player2.score += 1
+        @winner = @player2
         @game_over = true
       end
     end
@@ -155,7 +150,7 @@ class Board
     #{@row0}
     #{@separator_line}\t\t#{@player1.name}: #{@player1.score}
     #{@space_line}\t\t#{@player2.name}: #{@player2.score}
-    #{@row1}\t\t\tTies:     #{@scores[:ties]}
+    #{@row1}
     #{@separator_line}
     #{@space_line}
     #{@row2}
