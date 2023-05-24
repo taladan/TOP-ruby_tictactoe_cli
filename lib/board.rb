@@ -1,6 +1,7 @@
 require './lib/cells'
 require './lib/messaging'
 
+# Tic Tac Toe Board
 class Board
   include Cells
   include Messaging
@@ -11,12 +12,8 @@ class Board
     @player1 = p1
     @player2 = p2
     @winner = ''
-    # This will be deprecated after full implementation of player objects
     @separator_line = '   _____________|_______________|______________   '
     @space_line = '                |               |                '
-    # Currently using for testing win-state settings
-    # @board_matrix = Matrix[%w[X O O], %w[X O X], %w[X X O]]
-    # Uncomment before finish
     @board_matrix = Matrix[[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
     @row_top = " \t0\t \t1\t \t2"
     @row0 =
@@ -38,14 +35,7 @@ class Board
     @game_over
   end
 
-  def computer_play(player)
-    # TODO
-  end
-
   def play_piece(player)
-    # Need to refactor this so that it works when an already filled cell is chosen.
-    # is the choice playable?
-    #
     # if spot is playable? Play spot.  Otherwise prompt for a new spot and try to play again.
     cell = get_cell(get_player_choice)
     piece = player.piece
