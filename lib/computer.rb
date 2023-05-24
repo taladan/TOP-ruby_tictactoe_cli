@@ -27,24 +27,29 @@ class Computer < Player
   end
 
   # Block or play for advantage
-  def pick_position(pos)
+  def pick_position(hash)
     if @piece = "X"
-      my_slots = pos[:x_slots]
-      their_slots = pos[:o_slots]
+      my_slots = hash[:x_slots]
+      their_slots = hash[:o_slots]
     else
-      my_slots = pos[:o_slots]
-      their_slots = pos[:x_slots]
+      my_slots = hash[:o_slots]
+      their_slots = hash[:x_slots]
     end
 
     # check my piece and look for vectors that will allow
     # for a win.
-    # From my diagramming I have resolved:
 
     # For any vector or diagonal that has (2 of 'my' pieces
     # OR 2 of 'their' pieces) AND an empty cell, I need to
     # play my piece in the empty cell for either a win or
     # block.
     # if there is one cell available in a vector or diagonal and the filled cells are both "X" or "O", play there.
+
+    # This gets the first elements from each array in the value passed, tallies them and selects the values that are equal to 2
+    two_x_vector =
+      hsh[:x_slots].map(&:first).tally.select { |key, value| value == 2 }.keys
+    two_o_vector =
+      hsh[:o_slots].map(&:first).tally.select { |key, value| value == 2 }.keys
 
     # If there are not 2 of 'my' or 'their' pieces on a
     # diagonal or vector, if there is an empty cell on
@@ -91,4 +96,14 @@ class Computer < Player
     end
     os
   end
+end
+
+def find_diagonal(matrix)
+  diagonal = matrix.extract_diagonal.to_a
+  diagonal
+end
+
+def find_antidiagonal(matrix)
+  antidiagonal = matrix.rotate.extract_diagonal.to_a
+  antidiagonal
 end
