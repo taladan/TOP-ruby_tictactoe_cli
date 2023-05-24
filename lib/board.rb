@@ -1,9 +1,9 @@
 require './lib/cells'
 require './lib/messaging'
-include Cells
-include Messaging
 
 class Board
+  include Cells
+  include Messaging
   attr_accessor :game_over, :ties
   attr_reader :board_matrix, :winner
 
