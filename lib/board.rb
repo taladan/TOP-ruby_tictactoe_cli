@@ -5,16 +5,16 @@ require './lib/messaging'
 class Board
   include Cells
   include Messaging
-  attr_accessor :game_over, :ties
+  attr_accessor :ties
   attr_reader :board_matrix, :winner
 
-  def initialize(p1, p2)
+  def initialize(p1, p2, matrix = Matrix[[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']])
     @player1 = p1
     @player2 = p2
     @winner = ''
     @separator_line = '   _____________|_______________|______________   '
     @space_line = '                |               |                '
-    @board_matrix = Matrix[[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
+    @board_matrix = matrix
     @row_top = " \t0\t \t1\t \t2"
     @row0 =
       "A\t#{@board_matrix[0, 0]}\t|\t#{@board_matrix[0, 1]}\t|\t#{@board_matrix[0, 2]}"
@@ -23,6 +23,7 @@ class Board
     @row2 =
       "C\t#{@board_matrix[2, 0]}\t|\t#{@board_matrix[2, 1]}\t|\t#{@board_matrix[2, 2]}"
     @game_over = false
+    @ties = 0
   end
 
   def draw_board
@@ -71,15 +72,10 @@ class Board
   end
 
   def check_diagonals
-    if (0..2).map { |cell| @board_matrix[cell, cell] }.all?('X') ||
-       2.downto(0).map { |cell| @board_matrix[cell, cell] }.all?('X')
-      @winner = @player1
-      @game_over = true
-    elsif (0..2).map { |cell| @board_matrix[cell, cell] }.all?('O') ||
-          2.downto(0).map { |cell| @board_matrix[cell, cell] }.all?('O')
-      @winner = @player2
-      @game_over = true
-    end
+    top_left_to_bottom_right = (0..2).map { |cell| @board_matrix[cell, cell] }
+    bottom_left_to_top_right = (0..2).map { |cell| @board_matrix.rotate_entries[cell, cell] }
+    @game_over = true && @winner = @player1 if top_left_to_bottom_right.all?('X') || bottom_left_to_top_right.all?('X')
+    @game_over = true && @winner = @player2 if top_left_to_bottom_right.all?('O') || bottom_left_to_top_right.all?('O')
   end
 
   def check_rows
@@ -127,7 +123,7 @@ class Board
   end
 
   def put_status
-    print "Winner of this round: #{@winner}" if @game_over
+    print "Winner of this round: #{@winner}" if game_over?
   end
 
   def game_grid
