@@ -72,8 +72,12 @@ class Board
   end
 
   def check_diagonals
+    # Check from top left to bottom right
     top_left_to_bottom_right = (0..2).map { |cell| @board_matrix[cell, cell] }
+    # If we rotate the matrix then check from top left to bottom right, this is the same as checking from
+    # bottom left to top right
     bottom_left_to_top_right = (0..2).map { |cell| @board_matrix.rotate_entries[cell, cell] }
+
     @game_over = true && @winner = @player1 if top_left_to_bottom_right.all?('X') || bottom_left_to_top_right.all?('X')
     @game_over = true && @winner = @player2 if top_left_to_bottom_right.all?('O') || bottom_left_to_top_right.all?('O')
   end
