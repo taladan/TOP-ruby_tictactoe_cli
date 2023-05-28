@@ -1,13 +1,13 @@
 # lib/computer.rb
-require "./lib/player"
-require "./lib/matrix"
+require './lib/player'
+require './lib/matrix'
 
 class Computer < Player
   attr_reader :name, :piece, :type
 
   def initialize(name, piece)
     super(name, piece)
-    @type = "computer"
+    @type = 'computer'
   end
 
   def play_piece(matrix)
@@ -18,17 +18,16 @@ class Computer < Player
 
   # find filled and empty spots
   def analyze_matrix(matrix)
-    pos = {
+    {
       available_slots: find_available(matrix.row_vectors),
       x_slots: find_xslots(matrix.row_vectors),
-      o_slots: find_oslots(matrix.row_vectors),
+      o_slots: find_oslots(matrix.row_vectors)
     }
-    pos
   end
 
   # Block or play for advantage
   def pick_position(hash)
-    if @piece = "X"
+    if @piece = 'X'
       my_slots = hash[:x_slots]
       their_slots = hash[:o_slots]
     else
@@ -47,9 +46,9 @@ class Computer < Player
 
     # This gets the first elements from each array in the value passed, tallies them and selects the values that are equal to 2
     two_x_vector =
-      hsh[:x_slots].map(&:first).tally.select { |key, value| value == 2 }.keys
+      hsh[:x_slots].map(&:first).tally.select { |_key, value| value == 2 }.keys
     two_o_vector =
-      hsh[:o_slots].map(&:first).tally.select { |key, value| value == 2 }.keys
+      hsh[:o_slots].map(&:first).tally.select { |_key, value| value == 2 }.keys
 
     # If there are not 2 of 'my' or 'their' pieces on a
     # diagonal or vector, if there is an empty cell on
@@ -63,15 +62,14 @@ class Computer < Player
     # middle cell (never pick the center cell first).
   end
 
-  #put piece on board
-  def play_position(choice)
-  end
+  # put piece on board
+  def play_position(choice); end
 
   def find_available(vects)
     avail = []
     vects.each_with_index do |vector, vector_index|
       vector.each_with_index do |element, element_index|
-        avail.push([vector_index, element_index]) if element == " "
+        avail.push([vector_index, element_index]) if element == ' '
       end
     end
     avail
@@ -81,7 +79,7 @@ class Computer < Player
     xs = []
     vects.each_with_index do |vector, vector_index|
       vector.each_with_index do |element, element_index|
-        xs.push([vector_index, element_index]) if element == "X"
+        xs.push([vector_index, element_index]) if element == 'X'
       end
     end
     xs
@@ -91,7 +89,7 @@ class Computer < Player
     os = []
     vects.each_with_index do |vector, vector_index|
       vector.each_with_index do |element, element_index|
-        os.push([vector_index, element_index]) if element == "O"
+        os.push([vector_index, element_index]) if element == 'O'
       end
     end
     os
@@ -99,11 +97,9 @@ class Computer < Player
 end
 
 def find_diagonal(matrix)
-  diagonal = matrix.extract_diagonal.to_a
-  diagonal
+  matrix.extract_diagonal.to_a
 end
 
 def find_antidiagonal(matrix)
-  antidiagonal = matrix.rotate.extract_diagonal.to_a
-  antidiagonal
+  matrix.rotate.extract_diagonal.to_a
 end
