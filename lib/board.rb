@@ -41,7 +41,7 @@ class Board
     cell = get_cell(get_player_choice)
     piece = player.piece
     until playable?(@board_matrix, cell)
-      write('That spot is already taken./n')
+      write('That spot is already taken.\n')
       cell = get_cell(get_player_choice)
     end
     @board_matrix[cell[0], cell[1]] = piece
@@ -78,8 +78,8 @@ class Board
     # bottom left to top right
     bottom_left_to_top_right = (0..2).map { |cell| @board_matrix.rotate_entries[cell, cell] }
 
-    @game_over = true && @winner = @player1 if top_left_to_bottom_right.all?('X') || bottom_left_to_top_right.all?('X')
-    @game_over = true && @winner = @player2 if top_left_to_bottom_right.all?('O') || bottom_left_to_top_right.all?('O')
+    @winner = @player1 && @game_over = true if top_left_to_bottom_right.all?('X') || bottom_left_to_top_right.all?('X')
+    @winner = @player2 && @game_over = true if top_left_to_bottom_right.all?('O') || bottom_left_to_top_right.all?('O')
   end
 
   def check_rows
