@@ -82,8 +82,8 @@ end
 
 def game_loop(game, player1, player2)
   turn = player1
-  until game.game_over
-    game.game_over
+  until game.game_over?
+    game.game_over?
     game.draw_board
     write("It's #{turn.name}'s turn. ")
     game.play_piece(turn)
@@ -93,10 +93,11 @@ def game_loop(game, player1, player2)
              player1
            end
   end
-  if game.game_over && game.winner == 'Tie'
+
+  if game.game_over? && game.winner == 'Tie'
     write("The game ends in a draw!\n")
     game.ties += 1
-  elsif game.game_over
+  elsif game.game_over?
     write("The winner of this round is: #{game.winner.name}\n")
     game.winner.score += 1
   end
