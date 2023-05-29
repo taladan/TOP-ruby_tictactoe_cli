@@ -23,12 +23,12 @@ module Cells
       [2, 2]
     end
   end
-end
 
-def playable?(matrix, cell)
-  matrix[cell[0], cell[1]] == ' '
-end
+  def playable?(matrix, cell)
+    matrix[cell[0], cell[1]] == ' '
+  end
 
-def input_valid?(choice)
-  choice =~ /^[a-c][0-2]$/i
+  def input_valid?(choice)
+    choice =~ /^[a-c][0-2]$/i
+  end
 end
