@@ -29,6 +29,6 @@ module Cells
   end
 
   def input_valid?(choice)
-    choice =~ /^[a-c][0-2]$/i
+    !!(choice =~ /^[a-c][0-2]$/i)
   end
 end
